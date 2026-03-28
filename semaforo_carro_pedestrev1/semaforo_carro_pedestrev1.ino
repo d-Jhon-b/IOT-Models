@@ -1,4 +1,4 @@
-
+#define buzzer A0
 //semáforo de carros
 #define LED_RED 13
 #define LED_YELLOW 12
@@ -14,6 +14,11 @@ unsigned long int tempo_atual;
 unsigned long int tempo_30000ms;
 
 
+
+int melody[] = { 440, 440, 440, 349, 523, 440, 349, 523, 440 };
+int durations[] = { 500, 500, 500, 350, 150, 500, 350, 150, 500 };
+
+
 void setup() {
   Serial.begin(9600);
   pinMode(LED_RED, OUTPUT);
@@ -23,6 +28,7 @@ void setup() {
   
 
 
+  pinMode(buzzer, OUTPUT);
 
   pinMode(LED_P_RED, OUTPUT);
   pinMode(LED_P_GREEN, OUTPUT);
@@ -30,23 +36,34 @@ void setup() {
 }
 
 void loop() {
+
   digitalWrite(LED_GREEN, HIGH);
   digitalWrite(LED_RED, LOW);
   digitalWrite(LED_YELLOW, LOW);
+
+
   digitalWrite(LED_P_RED, HIGH);
   digitalWrite(LED_P_GREEN, LOW);
+  delay(5000);
 
   for (int i = 0; i < 100; i++) { 
     if (digitalRead(BUTTON_OPEN) == HIGH) {
       Serial.println("Botao pressionado! Cortando ciclo automatico...");
-      Serial.println("init dos cabaça de nós todos");
+      Serial.println("init dos cabaça de nós todosa");
+      tocarJingle();
+      while(digitalRead(BUTTON_OPEN) == HIGH) {
+        Serial.println("continua parado");
+        delay(10); 
+      }
       break; 
     }
     delay(100); 
   }
 
+  Serial.println("fechando semaforo para travessia");
   digitalWrite(LED_GREEN, LOW);
   digitalWrite(LED_YELLOW, HIGH);
+
   delay(3000); 
 
   digitalWrite(LED_YELLOW, LOW);
@@ -61,5 +78,19 @@ void loop() {
   digitalWrite(LED_P_RED, HIGH);
   delay(2000);
 
+}
 
+
+void tocarJingle() {
+  for (int i = 0; i < 9; i++) {
+    // tone(pino, frequência, duração)
+    tone(buzzer, melody[i], durations[i]);
+    
+    // Pequena pausa entre as notas para não embolar o som
+    int pauseBetweenNotes = durations[i] * 1.30;
+    delay(pauseBetweenNotes);
+    
+    // Garante que o som pare antes da próxima nota
+    noTone(buzzer); 
+  }
 }
