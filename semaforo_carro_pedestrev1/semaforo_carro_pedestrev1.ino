@@ -1,3 +1,8 @@
+//link do repositório: https://github.com/d-Jhon-b/IOT-Models.git
+//link do exemplo no wolki: https://wokwi.com/projects/459671671209434113
+
+
+
 #define buzzer A0
 //semáforo de carros
 #define LED_RED 13
