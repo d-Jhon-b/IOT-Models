@@ -15,7 +15,6 @@ unsigned long int tempo_30000ms;
 
 
 void setup() {
-  // put your setup code here, to run once:
   Serial.begin(9600);
   pinMode(LED_RED, OUTPUT);
   pinMode(LED_GREEN, OUTPUT);
