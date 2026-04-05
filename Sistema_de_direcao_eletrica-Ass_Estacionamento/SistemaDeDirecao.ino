@@ -1,0 +1,68 @@
+//link do repositório: https://github.com/d-Jhon-b/IOT-Models.git
+//link do exemplo no wolki: https://wokwi.com/projects/460477654202654721
+
+
+
+#include <Servo.h>
+
+Servo rodasServ;
+
+// Definições de Pinos
+#define pinPot A0
+#define pinServo 9
+#define pinTrig 12
+#define pinEcho 13
+#define ledVerde 2
+#define ledAmarelo 3
+#define ledVermelho 4
+#define pinBuzzer 5
+
+
+void setup() {
+  rodasServ.attach(pinServo);
+  
+  pinMode(pinTrig, OUTPUT);
+  pinMode(pinEcho, INPUT);
+  pinMode(ledVerde, OUTPUT);
+  pinMode(ledAmarelo, OUTPUT);
+  pinMode(ledVermelho, OUTPUT);
+  pinMode(pinBuzzer, OUTPUT);
+
+  Serial.begin(9600);
+}
+
+void loop() {
+  int valorPot = analogRead(pinPot);
+  int angulo = map(valorPot, 0, 1023, 0, 180);
+  rodasServ.write(angulo);
+  
+  digitalWrite(pinTrig, LOW);
+  delayMicroseconds(2);
+  digitalWrite(pinTrig, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(pinTrig, LOW);
+
+  long duracao = pulseIn(pinEcho, HIGH);
+  int distancia = duracao * 0.034 / 2;
+
+  if (distancia > 50) { 
+    digitalWrite(ledVerde, HIGH);
+    digitalWrite(ledAmarelo, LOW);
+    digitalWrite(ledVermelho, LOW);
+    noTone(pinBuzzer);
+  } 
+  else if (distancia <= 50 && distancia > 20) {
+    digitalWrite(ledVerde, LOW);
+    digitalWrite(ledAmarelo, HIGH);
+    digitalWrite(ledVermelho, LOW);
+    noTone(pinBuzzer);
+  } 
+  else { 
+    digitalWrite(ledVerde, LOW);
+    digitalWrite(ledAmarelo, LOW);
+    digitalWrite(ledVermelho, HIGH);
+    tone(pinBuzzer, 1000); 
+  }
+
+  delay(50); 
+}
