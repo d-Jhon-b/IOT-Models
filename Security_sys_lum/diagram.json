@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "author": "Novels Mania",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-breadboard-half", "id": "bb1", "top": -108.6, "left": 194.8, "attrs": {} },
+    { "type": "wokwi-arduino-uno", "id": "uno", "top": -105, "left": -106.2, "attrs": {} },
+    {
+      "type": "wokwi-photoresistor-sensor",
+      "id": "ldr1",
+      "top": -227.2,
+      "left": 39.2,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-pir-motion-sensor",
+      "id": "pir1",
+      "top": -322.4,
+      "left": 261.42,
+      "attrs": {}
+    },
+    { "type": "wokwi-relay-module", "id": "relay1", "top": -230.2, "left": 364.8, "attrs": {} }
+  ],
+  "connections": [
+    [ "uno:5V", "bb1:bp.1", "red", [ "v38.3", "h128.6", "v-47.1" ] ],
+    [ "uno:GND.2", "bb1:bn.1", "black", [ "v28.7", "h109.5", "v-28.8" ] ],
+    [ "bb1:bp.25", "bb1:tp.25", "red", [ "h40", "v-174" ] ],
+    [ "bb1:bn.25", "bb1:tn.25", "black", [ "v-1.3", "h30.4", "v-172.8" ] ],
+    [ "ldr1:VCC", "bb1:tp.1", "red", [ "h0" ] ],
+    [ "pir1:VCC", "bb1:tp.3", "red", [ "v19.2", "h-48", "v114.9" ] ],
+    [ "ldr1:GND", "bb1:tn.1", "black", [ "h9.6", "v114.8" ] ],
+    [ "pir1:GND", "bb1:tn.4", "black", [ "v28.8", "h-57.86" ] ],
+    [ "relay1:VCC", "bb1:tp.6", "red", [ "h-19.2", "v19.2", "h-76.8" ] ],
+    [ "relay1:GND", "bb1:tn.7", "black", [ "h-9.6", "v18.8", "h-48" ] ],
+    [ "uno:3", "relay1:IN", "violet", [ "v-28.8", "h234.4" ] ],
+    [ "uno:A0", "ldr1:AO", "cyan", [ "v19.1", "h61.4", "v-259.2", "h48", "v-9.6" ] ],
+    [ "uno:2", "pir1:OUT", "green", [ "v-38.4", "h176.9", "v-9.6" ] ]
+  ],
+  "dependencies": {}
+}

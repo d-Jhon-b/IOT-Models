@@ -1,0 +1,43 @@
+#define RELAY_PIN 3
+#define LDR_PIN A0
+#define PIR_PIN 2
+ 
+
+const int THRESHOLD_ESCURO = 400; 
+
+void setup() {
+  pinMode(LDR_PIN, INPUT);
+  pinMode(PIR_PIN, INPUT);
+  pinMode(RELAY_PIN, OUTPUT);
+
+  digitalWrite(RELAY_PIN, LOW);
+
+  Serial.begin(9600);
+  Serial.println("Security Sys on.");
+}
+
+void loop() {
+  int valorLDR = analogRead(LDR_PIN);
+  int detectouMovimento = digitalRead(PIR_PIN);
+
+  Serial.print("Luminosidade: ");
+  Serial.print(valorLDR);
+
+  if (valorLDR < THRESHOLD_ESCURO) {
+    Serial.print(" Breu total (Ambiente oscuro) - ");
+    
+    if (detectouMovimento == HIGH) {
+      Serial.println("Movimento DETECTADO! Relé \nligado\n.");
+      digitalWrite(RELAY_PIN, HIGH);
+    } else {
+      Serial.println("Sem movimento. Relé \ndesligado\n.");
+      digitalWrite(RELAY_PIN, LOW);
+    }
+    
+  } else {
+    Serial.println(" A luz está instaurada ((Ambiente Claro)) - Sistema em Espera.");
+    digitalWrite(RELAY_PIN, LOW);
+  }
+
+  delay(500);
+}
