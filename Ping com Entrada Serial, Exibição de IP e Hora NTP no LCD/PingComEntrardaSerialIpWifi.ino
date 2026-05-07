@@ -1,0 +1,95 @@
+//link do repositório: https://github.com/d-Jhon-b/IOT-Models.git
+//link do exemplo no wolki: https://wokwi.com/projects/463375495463307265
+
+
+
+#include <WiFi.h>
+#include <ESPping.h>
+#include <LiquidCrystal_I2C.h>
+#include <NTPClient.h>
+#include <WiFiUdp.h>
+
+#define COLUNAS 20
+#define LINHAS 4
+LiquidCrystal_I2C lcd(0x27, COLUNAS, LINHAS);
+
+const char *ssid = "Wokwi-GUEST";
+const char *password = "";
+
+WiFiUDP ntpUDP;
+NTPClient timeClient(ntpUDP, "a.st1.ntp.br", -3 * 3600); 
+
+String host = ""; 
+bool hostDefinido = false;
+
+void setup() {
+  Serial.begin(115200);
+  lcd.init();
+  lcd.backlight();
+
+  WiFi.begin(ssid, password);
+  lcd.setCursor(0, 0);
+  lcd.print("Conectando WiFi...");
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("\nConectado!");
+  timeClient.begin();
+  
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Aguardando Host...");
+  Serial.println("Digite o endereço do host (ex: google.com) no Serial:");
+}
+
+void loop() {
+  timeClient.update();
+  
+  lcd.setCursor(0, 0);
+  lcd.print("Hora: ");
+  lcd.print(timeClient.getFormattedTime());
+
+  if (Serial.available() > 0) {
+    host = Serial.readStringUntil('\n');
+    host.trim(); 
+    
+    if (host.length() > 0) {
+      lcd.clear();
+      lcd.setCursor(0, 1);
+      lcd.print("Host: ");
+      lcd.print(host.substring(0, 14));
+      
+      Serial.print("\nTestando ping para: ");
+      Serial.println(host);
+
+      if (Ping.ping(host.c_str(), 3)) {
+        float avgTime = Ping.averageTime();
+        
+        lcd.setCursor(0, 2);
+        lcd.print("IP: ");
+        lcd.print(Ping.destinationIPName());
+        
+        lcd.setCursor(0, 3);
+        lcd.print("Ping: ");
+        lcd.print(avgTime);
+        lcd.print("ms    ");
+
+        Serial.print("Resposta de ");
+        Serial.print(Ping.destinationIPName());
+        Serial.print(": tempo medio = ");
+        Serial.print(avgTime);
+        Serial.println("ms");
+      } else {
+        lcd.setCursor(0, 2);
+        lcd.print("Falha no Host!      ");
+        Serial.println("Erro: Host inacessivel.");
+      }
+      hostDefinido = true;
+    }
+  }
+
+  delay(1000); 
+}

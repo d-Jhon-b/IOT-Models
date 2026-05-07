@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "author": "Novels Mania",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": 9.6, "left": -235.16, "attrs": {} },
+    { "type": "wokwi-led", "id": "led1", "top": 102, "left": 263, "attrs": { "color": "red" } },
+    {
+      "type": "wokwi-resistor",
+      "id": "res1",
+      "top": 176.75,
+      "left": 96,
+      "attrs": { "value": "220" }
+    },
+    {
+      "type": "wokwi-lcd2004",
+      "id": "lcd1",
+      "top": -147.2,
+      "left": -13.6,
+      "attrs": { "pins": "i2c" }
+    }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+    [ "esp:GND.1", "lcd1:GND", "black", [ "v0" ] ],
+    [ "esp:5V", "lcd1:VCC", "red", [ "v0" ] ],
+    [ "esp:21", "lcd1:SDA", "green", [ "v0" ] ],
+    [ "esp:22", "lcd1:SCL", "yellow", [ "v0" ] ],
+    [ "esp:15", "res1:1", "blue", [ "h234.4" ] ],
+    [ "res1:2", "led1:A", "blue", [ "h133.2" ] ],
+    [ "led1:C", "esp:GND.2", "black", [ "v48", "h-114.8", "v-153.6" ] ]
+  ],
+  "dependencies": {}
+}
